@@ -4,7 +4,15 @@ use warnings;
 use 5.008008;
 our $VERSION = '0.01';
 
+sub import {
+    my $class = shift;
+    my $pkg = caller;
 
+    my $var = shift || 'q';
+
+    no strict 'refs';
+    *{"$pkg\::$var"} = \q{'};
+}
 
 1;
 __END__
@@ -13,15 +21,19 @@ __END__
 
 =head1 NAME
 
-Acme::SingleQuote -
+Acme::SingleQuote - use single quote in one-liner
 
 =head1 SYNOPSIS
 
-  use Acme::SingleQuote;
+  # export $q
+  perl -MAcme::SingleQuote -le 'print qq/${q}Hello!${q}/'
+
+  # export $quote
+  perl -MAcme::SingleQuote=quote -le 'print qq/${quote}World!${quote}/'
 
 =head1 DESCRIPTION
 
-Acme::SingleQuote is
+Acme::SingleQuote provides single quote character for one-liner.
 
 =head1 AUTHOR
 
